@@ -1,0 +1,48 @@
+<div class="footer">
+  <div class="row">
+    <div class="columns">
+      <div class="footer__extra-link clearfix">
+        <div class="footer__extra-left">
+          <ol class="clearfix">
+            <li class="footer__extra-link-item"><a href="{{ url('record_main') }}">{{ _('Judging Queue') }}</a></li>
+            <li class="footer__extra-link-item"><a href="{{ url('status') }}">{{ _('Service Status') }}</a></li>
+            <li class="footer__extra-link-item">
+              {% if handler.session.legacy %}
+              <a href="/legacy">{{ _('Standard mode') }}</a>
+              {% else %}
+              <a href="/legacy?legacy=true">{{ _('Legacy mode') }}</a>
+              {% endif %}
+            </li>
+            <li class="footer__extra-link-item nojs--hide" data-dropdown-target="#menu-footer-theme">
+              <span><span class="icon icon-global"></span> {{ _('Theme') }} <span
+                  class="icon icon-expand_less"></span></span>
+              <ol class="dropdown-target menu" id="menu-footer-theme">
+                <li class="menu__item"><a class="menu__link" href="{{ url('set_theme', theme='light') }}">{{ _('Light')
+                    }}</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ url('set_theme', theme='dark') }}">{{ _('Dark')
+                    }}</a></li>
+              </ol>
+            </li>
+          </ol>
+        </div>
+        <div class="footer__extra-right">
+          <ol class="clearfix">
+            {%- for html in (handler.domain.ui.footer_extra_html|default('')).split('\n') -%}
+            <li class="footer__extra-link-item">{{ html|safe }}</li>
+            {%- endfor -%}
+            {%- for html in (model.system.get('ui-default.footer_extra_html')|default('')).split('\n') -%}
+            <li class="footer__extra-link-item">{{ html|safe }}</li>
+            {%- endfor -%}
+            <li class="footer__extra-link-item">Worker {{ process.env.NODE_APP_INSTANCE }}, {{ Date.now() -
+              handler.args.__start }}ms</li>
+            <!-- Prepare {{ handler.args.__prepareDone - handler.args.__prepare }}ms -->
+            <!-- Method {{ handler.args.__methodDone - handler.args.__method }}ms -->
+            <li class="footer__extra-link-item">Powered by <a href="https://hydro.js.org">Hydro v{{
+                global.Hydro.version.hydrooj }}</a> {{ "Professional" if model.system.get('server.pro') else "Community"
+              }}, Modified by 33DAI </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

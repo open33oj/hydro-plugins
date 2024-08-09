@@ -1,0 +1,57 @@
+{% set page_name = "新建剪贴板" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          <div class="row">
+            <div class="medium-10 columns">
+              <label>
+                标题
+                <input name="title" placeholder="标题" class="textbox" autofocus>
+              </label>
+            </div>
+            <br>
+            <div class="medium-2 columns">
+              <label>
+                <label class="checkbox">
+                  <input type="checkbox" name="isprivate" value="on" class="checkbox"> 私有
+                </label>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="medium-12 columns">
+              {{ form.form_textarea({
+              columns:12,
+              label:'Content',
+              name:'content',
+              value:'',
+              markdown:true,
+              required:true,
+              extra_style:'height: 500px',
+              extra_textarea_class:'auto-resize'
+              }) }}
+            </div>
+          </div>
+          <div class="row" style="margin-left: 5px; text-align: left;">
+            <input type="hidden" name="csrfToken" value="{{ handler.csrfToken }}">
+            <button type="submit" class="rounded primary button">
+              新建剪贴板
+            </button>
+            <a href="/paste/manage" class="rounded button">
+              管理所有剪贴板
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}

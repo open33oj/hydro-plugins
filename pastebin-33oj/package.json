@@ -1,0 +1,8 @@
+{
+  "name": "pastebin-33oj",
+  "version": "0.0.1",
+  "description": "Hydro pastebin module",
+  "main": "index.ts",
+  "author": "33DAI",
+  "license": "AGPL-3.0"
+}

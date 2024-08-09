@@ -1,0 +1,36 @@
+{% set page_name = "删除剪贴板" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          <div class="row">
+            <div class="medium-12 columns" style="text-align: center;">
+              <h2>
+                删除剪贴板
+              </h2>
+              <label>
+                <input type="hidden" name="pasteId" value="{{ doc._id }}" class="textbox" readonly>
+              </label>
+              <br>
+              <h4 style="font-size:1rem;">
+                剪贴板 ID: {{ doc._id }}
+              </h4>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="margin-left: 5px; text-align: left;">
+            <div style="margin:1.6rem 0 1.6rem;">点击下方按钮删除剪贴板，此操作将不可恢复。</div>
+            <input type="hidden" name="csrfToken" value="{{ handler.csrfToken }}">
+            <button type="submit" class="rounded primary button">
+              确认删除
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

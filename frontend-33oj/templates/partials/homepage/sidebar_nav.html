@@ -1,0 +1,20 @@
+<div class="section side">
+  <div class="section__body">
+    <ul class="group-list">
+      {% for group in payload %}
+      <li class="group-list__item">
+        <h2 class="section__title">{{ group.title }}</h2>
+        <ol class="chip-list">
+          {% for row in group.urls %}
+          <li class="chip-list__item">
+            <a class="typo-a" href="{{ row.url }}" target="_blank">
+              {{ row.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ol>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

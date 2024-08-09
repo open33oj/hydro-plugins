@@ -1,0 +1,60 @@
+{% set page_name = "查看剪贴板" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+      <div class="section__body">
+        <!--<form method="post">-->
+        <div class="row">
+          <div class="medium-12 columns" style="text-align: center;">
+            <h2>
+              {{ doc.title }}
+            </h2>
+          </div>
+        </div>
+        <div class="section__body typo"
+          style="padding-left:20px;padding-right: 20px;padding-top: 30px;padding-bottom: 20px;">
+          {{ doc.content|markdown|safe }}
+        </div>
+        <hr />
+        <div style="margin:2rem 0 1.2rem;">
+          <button onclick="toggleInfoView()" style="color:inherit;font-size:0.96rem!important;"
+            id="view-info">查看原始 markdown 内容</button>
+        </div>
+        <script>
+          function toggleInfoView() {
+            var jq = jQuery.noConflict();
+            jq("#view-source").slideToggle();
+          }
+        </script>
+
+        <div class="code-toolbar" id="view-source" style="display:none;">
+          <pre class="syntax-hl language-markdown"
+            tabindex="0"><code class="language-markdown" style="font-size:0.8em!important;">{{ doc.content | escape | safe }}</code></pre>
+        </div>
+
+        <br>
+        <div class="row" style="margin-left: 5px; text-align: left;">
+          <input type="hidden" name="csrfToken" value="{{ handler.csrfToken }}">
+        </div>
+        {% if handler.user._id == doc.owner %}
+        <ul class="section__footer supplementary dot list">
+          <li><a href="/paste/manage">
+              <span class="icon icon-copy"></span> 管理所有剪贴板
+            </a></li>
+          <li><a href="{{ doc._id }}/edit">
+              <span class="icon icon-edit"></span> 编辑剪贴板
+            </a></li>
+          <li><a href="{{ doc._id }}/delete">
+              <span class="icon icon-close"></span> 删除剪贴板
+            </a></li>
+        </ul>
+        {% endif %}
+        <div style="margin-top:12px;user-select:none;">我们会审查剪贴板内容，并对发布不合适内容的同学进行相应的处理</div>
+        <!--</form>-->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% import "components/form.html" as form with context %}
+{% import "components/sidemenu.html" as sidemenu with context %}
+{% import "components/paginator.html" as paginator with context %}
+{% import "components/nothing.html" as nothing with context %}
+{% import "components/noscript_note.html" as noscript_note with context %}
+{% import "components/user.html" as user with context %}
+<!DOCTYPE html>
+<html data-page="{{ page_name }}" data-layout="{{ layout_name }}" class="layout--{{ layout_name }} page--{{ page_name }} theme--{{ (handler.user|default({})).theme|default('default') }} nojs" lang="{{ UserContext.viewLang }}" data-app="Hydro">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ UiContext.cdn_prefix }}apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="{{ UiContext.cdn_prefix }}favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="{{ UiContext.cdn_prefix }}android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="{{ UiContext.cdn_prefix }}favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="{{ UiContext.cdn_prefix }}favicon-16x16.png" sizes="16x16">
+  {% if handler.context.request.url %}<link rel="canonical" href="{{ model.system.get('server.url') }}{{ handler.context.request.url.substring(1) }}">{% endif %}
+  <meta name="theme-color" content="#56758f">
+  {% block ogp %}
+  <meta property="og:site_name" content="{{ (handler.domain|default({ui:[]})).ui.name|default(model.system.get('server.name')) }}" />
+  <meta property="og:title" content="{{ handler.renderTitle(page_name) }}" />
+  <meta property="og:url" content="{{ model.system.get('server.url') }}{{ handler.request.path.slice(1) }}" />
+  <meta property="og:image" content="{{ UiContext.cdn_prefix }}favicon-96x96.png" />
+  {% endblock %}
+  <title>{{ handler.renderTitle(page_name) }}</title>
+  <style>
+    body {
+      --font-family: "{{ UserContext.fontFamily }}", "Open Sans", "Seravek", "Segoe UI", "Verdana", "PingFang SC", "Hiragino Sans GB", "Lantinghei SC", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans";
+      --code-font-family: "{{ UserContext.codeFontFamily }}", "monaco", "Source Code Pro", "Consolas", "Lucida Console", "monospace";
+      --font-ligatures: {{ "normal" if UserContext.codeFontLigatures else "none" }} !important;
+    }
+    
+    .section{border-radius:10px}
+
+    {% if not isIE(handler.request.headers['user-agent']) and not handler.session.legacy %}
+      #panel { display: flex; flex-direction: column; }
+    {% endif %}
+  </style>
+  {% if process.env.DEV %}
+    <script src="/default.theme.js?version={{ global.Hydro.version['ui-default'] }}"></script>
+    <link rel="stylesheet" media="all" href="/theme.css?version={{ global.Hydro.version['ui-default'] }}">
+  {% else %}
+    <link rel="stylesheet" media="all" href="{{ UiContext.cdn_prefix }}theme-{{ global.Hydro.version['ui-default'] }}.css">
+  {% endif %}
+  {% if not isIE(handler.request.headers['user-agent']) and not handler.session.legacy %}
+    <script>
+      var _htmlNode = document.documentElement;
+      _htmlNode.className = _htmlNode.className.replace(' nojs', ' hasjs');
+      var UiContext = '{{ UiContext|json|jsesc|safe }}';
+      var UserContext = '{{ UserContext|json|jsesc|safe }}';
+    </script>
+  {% endif %}  
+  {% set UiContext = Object.create(UiContext) %}
+  {% set UserContext = Object.create(UserContext) %}
+</head>
+<body>
+  {% if not isIE(handler.request.headers['user-agent']) and not handler.session.legacy %}
+    <script type="text/javascript" src="/constant/{{ UiContext.constantVersion }}.js"></script>
+    <script type="text/javascript" src="{{ UiContext.cdn_prefix }}resource/{{ global.Hydro.version['ui-default'] }}/lang-{{ _('__id') }}.js"></script>
+    <script type="text/javascript" src="{{ UiContext.cdn_prefix }}hydro-{{ global.Hydro.version['ui-default'] }}.js"></script>
+  {% endif %}
+  {% block body %}{% endblock %}
+  {% block script %}{% endblock %}
+  {% if not isIE(handler.request.headers['user-agent']) and not handler.session.legacy %}
+    <script>
+      var UiContextNew = '{{ UiContext|json|jsesc|safe }}';
+      var UserContextNew = '{{ UserContext|json|jsesc|safe }}';
+    </script>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% set page_name = "管理所有剪贴板" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+      <div class="section__body">
+        <!--<form method="post">-->
+        <div class="row">
+          <div class="medium-12 columns" style="text-align: center;">
+            <h2>
+              管理所有剪贴板
+            </h2>
+            <a href="/paste/create" type="submit" class="rounded primary button" style="margin-top:2em;">
+              新建剪贴板
+            </a>
+            <p>我们会审查剪贴板内容，并对发布不合适内容的同学进行相应的处理</p>
+          </div>
+        </div>
+        <div class="row"
+          style="padding-left:20px;padding-right: 20px;padding-top: 40px;padding-bottom: 20px;user-select:none;">
+          <table class="data-table">
+            <tbody>
+              {%- for pdoc in doc -%}
+              <tr>
+                <td style="width: 8rem">
+                  <a href="/paste/show/{{pdoc._id}}/edit"> 编辑 </a>&nbsp;/&nbsp;
+                  <a href="/paste/show/{{pdoc._id}}/delete"> 删除 </a>
+                </td>
+                <td><a href="/paste/show/{{pdoc._id}}" style="color:inherit">{{pdoc.title}}</a></td>
+              </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

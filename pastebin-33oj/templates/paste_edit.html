@@ -1,0 +1,63 @@
+{% set page_name = "编辑剪贴板" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          <div class="row">
+            <div class="medium-12 columns">
+              <label>
+                剪贴板 ID
+                <input name="pasteId" value="{{ doc._id }}" class="textbox" readonly>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="medium-10 columns">
+              <label>
+                标题
+                <input name="title" placeholder="标题" value="{{ doc.title }}" class="textbox" autofocus>
+              </label>
+            </div>
+            <br>
+            <div class="medium-2 columns">
+              <label>
+                <label class="checkbox">
+                  <input type="checkbox" name="isprivate" value="on" class="checkbox"
+                   {%- if doc.isprivate %} checked {%- endif -%}> 私有
+                </label>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="medium-12 columns">
+              {{ form.form_textarea({
+                columns:12,
+                label:'Content',
+                name:'content',
+                value: doc.content,
+                markdown:true,
+                required:true,
+                extra_style:'height: 500px',
+                extra_textarea_class:'auto-resize'
+                }) }}
+            </div>
+          </div>
+          <div class="row" style="margin-left: 5px; text-align: left;">
+            <input type="hidden" name="csrfToken" value="{{ handler.csrfToken }}">
+            <button type="submit" class="rounded primary button">
+              更新
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}
