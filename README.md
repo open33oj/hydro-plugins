@@ -66,7 +66,7 @@
 
 ### 配置
 
-- 入口：`baseurl/paste/manage`，找个地方把这个入口丢一下就好了。
+- 入口：`baseurl/badge`，找个地方把这个入口丢一下就好了。
 - 权限配置：默认是所有用户可以查看，`PRIV.PRIV_CREATE_DOMAIN` 用户可以管理。
 
 ## pastebin-33oj
