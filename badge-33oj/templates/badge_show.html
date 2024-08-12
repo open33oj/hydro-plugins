@@ -1,0 +1,75 @@
+{% set page_name = "badge_show" %}
+{% extends "layout/basic.html" %}
+{% import "components/paginator.html" as paginator with context %}
+{% import "components/nothing.html" as nothing with context %}
+{% block content %}
+<style>
+.col--uid {
+    width: 4rem;
+}
+.col--user{
+    width: 20rem;
+}
+</style>
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+      <div class="section__header">
+          <h1 class="section__title">{{ _('Users With Badge') }}</h1>
+          <div class="section__tools">
+            <a href="/badge/create">
+              <button class="primary rounded button">{{ _('badge_create') }}</button>
+	    </a>
+            <a href="/badge/manage">
+	      <button class="primary rounded button">{{ _('badge_manage') }}</button>
+            </a>
+	  </div>
+      </div>
+      <div class="section__body no-padding">
+        <div data-fragment-id="ranking">
+          {% if not udocs.length %}
+          {{ nothing.render('Sorry, there are no badges.') }}
+          {% else %}
+          <table class="data-table">
+            <colgroup>
+              <col class="col--uid">
+              <col class="col--user">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="col--uid">{{ _('User ID') }}</th>
+                <th class="col--user">{{ _('Username') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for udoc in udocs -%}
+              <tr>
+                  <td class="col--uid">{{ udoc._id }}</td>
+                  <td class="col--user">
+                    <span class="user-profile-link">
+                      <img class="small user-profile-avatar v-center" loading="lazy" src="{{ avatarUrl(udoc.avatar|default('')) }}" width="20" height="20">
+                      <a class="user-profile-name v-center" href="{{ url('user_detail', uid=udoc._id) }}">
+                        {{ udoc.uname }}
+                      </a>
+                      {% if udoc.badge %}
+                      {% set _badge = udoc.badge.split('#') %}
+                      <span class="user-profile-badge v-center" style="background-color:#{{ _badge[1] }}{% if _badge[2] %};color:#{{ _badge[2] }}{% endif %}">{{ _badge[0] }}</span>
+                      {% endif %}
+                      {% if udoc.level %}
+                      {% set level = udoc.level %}
+                      <a class="user-profile-badge v-center badge--lv{{ level }}" href="{{ url('user_detail', uid=udoc._id) }}" data-tooltip="LV {{ level }}: Top {{ model.builtin.LEVELS[level]|default('N/A') }}%">LV {{ level }}</a>
+                      {% endif %}
+                    </span>
+		  </td>
+              </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+          {{ paginator.render(page, upcount) }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

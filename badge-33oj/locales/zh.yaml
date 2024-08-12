@@ -1,0 +1,15 @@
+'Badge Rules:': '徽章规则：'
+'If already have badge, this will change that.': '如果已有徽章，这里会改变原有徽章。'
+BadgeText: 徽章文字
+BadgeColor: 徽章颜色
+BadgeTextColor: 徽章文字颜色
+'Badge color need a color code like #569CD6.': '徽章颜色需要使用像 #569CD6 这样的颜色代码'
+'web_safe_colors:': 'WEB安全色：'
+Badge: 徽章
+'Sorry, there are no badges.': '抱歉，目前没人拥有徽章'
+edit badge: 编辑徽章
+del badge: 删除徽章
+Users With Badge: 有徽章的用户
+badge_manage: 管理徽章
+badge_create: 添加徽章
+badge_show: 展示徽章

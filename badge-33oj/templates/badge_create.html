@@ -1,0 +1,66 @@
+{% set page_name = "badge_create" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<style>
+  .col--uid {
+    width: 4rem;
+  }
+
+  .col--user {
+    width: 20rem;
+  }
+</style>
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title" id="create" data-heading>{{ _('badge_create') }}</h1>
+      </div>
+      <div class="section__body">
+        <blockquote class="note typo">
+          <p>{{ _('Badge Rules:') }}</p>
+          <ul>
+            <li>{{ _('If already have badge, this will change that.') }}</li>
+            <li>{{ _('Badge color need a color code like #569CD6.') }}</li>
+            <li>{{ _('web_safe_colors:') }}<a target="_blank"
+                href="https://tool.chinaz.com/Tools/web">https://tool.chinaz.com/Tools/web</a></li>
+          </ul>
+        </blockquote>
+        <form method="post">
+          {{ form.form_text({
+          label:'By Username / UID',
+          name:'uidOrName',
+          autofocus:true,
+          required:true
+          }) }}
+          {{ form.form_text({
+          label:'BadgeText',
+          name:'text',
+          required:true
+          }) }}
+          {{ form.form_text({
+          label:'BadgeColor',
+          name:'color',
+          required:true
+          }) }}
+          {{ form.form_text({
+          label:'BadgeTextColor',
+          name:'textColor',
+          required:true
+          }) }}
+          <div class="row">
+            <div class="columns">
+              <button type="submit" class="rounded primary button">
+                {{ _('Create') }}
+              </button>
+              <button type="button" class="rounded button" onclick="window.history.go(-1)">
+                {{ _('Cancel') }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
