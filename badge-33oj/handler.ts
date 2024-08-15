@@ -57,6 +57,6 @@ export async function apply(ctx: Context) {
     ctx.Route('badge_show', '/badge', BadgeShowHandler, PRIV.PRIV_USER_PROFILE);
     ctx.Route('badge_create', '/badge/create', BadgeCreateHandler, PRIV.PRIV_CREATE_DOMAIN);
     ctx.Route('badge_manage', '/badge/manage', BadgeManageHandler, PRIV.PRIV_CREATE_DOMAIN);
-    ctx.Route('badge_del', '/badge/manage/:id/del', BadgeDelHandler, PRIV.PRIV_CREATE_DOMAIN);
+    ctx.Route('badge_del', '/badge/manage/:uid/del', BadgeDelHandler, PRIV.PRIV_CREATE_DOMAIN);
 }
 
