@@ -5,9 +5,9 @@
 - `frontend-33oj`：33OJ 的前端修改
 - `badge-33oj`：徽章管理插件
 - `pastebin-33oj`：剪贴板插件，基于官方例子与 [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
+- `checkin-33oj`：打卡及每日运势
 - `coin-33oj`：简单硬币插件（重写中）
 - `realname-33oj`：简单实名插件（重写中）
-- `today-33oj`：简单每日运势（重写中）
 - `countdown`：倒计时插件，基于 [liyanqwq/hydrooj-countdown](https://github.com/liyanqwq/hydrooj-countdown)
 
 ## frontend-33oj
@@ -32,7 +32,7 @@
 
 - `templates/partials/scoreboard.html`：成绩表中显示分组名
 - `templates/partials/homepage/sidebar_nav.html`：添加了一个可以在控制面板设置的边栏导航。
-  - 使用：进入 `控制面板`、`系统设置`、`hydrooj`、`首页，如下配置好需要展示的链接
+  - 使用：进入 `控制面板`、`系统设置`、`hydrooj`、`首页`，如下配置好需要展示的链接
     ```
       sidebar_nav:
         - title: 常用功能
@@ -57,7 +57,7 @@
 
 ## badge-33oj
 
-一个简单的官方自带 badge 管理页面。
+徽章管理插件
 
 ### 安装
 
@@ -68,6 +68,43 @@
 
 - 入口：`baseurl/badge`，找个地方把这个入口丢一下就好了。
 - 权限配置：默认是所有用户可以查看，`PRIV.PRIV_CREATE_DOMAIN` 用户可以管理。
+
+## checkin-33oj
+
+打卡及每日运势
+
+### 安装
+
+1. 添加插件：`hydrooj addon add /path/to/checkin-33oj`
+2. 重启程序：`pm2 restart hydrooj`
+
+### 配置
+
+进入 `控制面板`、`系统设置`、`hydrooj`、`首页`，如下配置好。
+
+```
+  checkin:
+    luck_type:
+      - text: "大吉"
+        color: "#ED5A65"
+      - text: "吉"
+        color: "#ED5A65"
+      - text: "小吉"
+        color: "#ED5A65"
+      - text: "平"
+        color: "#161823"
+      - text: "小凶"
+        color: "#161823"
+      - text: "小凶"
+        color: "#161823"
+      - text: "大凶"
+        color: "#161823"
+    luck_vip:
+      - 2
+      - 3 
+```
+
+默认打卡后得到 $0\sim 6$ 中的一个运势结果。如果 `uid` 在 `luck_vip` 中则显示 `天天大吉`（颜色为 `luck_type[0]`）。
 
 ## pastebin-33oj
 

@@ -1,0 +1,28 @@
+<div class="section side">
+	<div class="section__header">
+		<h1 class="section__title">今日运势</h1>
+	</div>
+	<div class="section__body typo" style="text-align: center">
+		{% if UserContext._id != 0 %}
+			{% if payload.luck_today == UserContext.checkin_time %}
+				{% if payload.luck_vip.includes(UserContext._id) %}
+					<h1 style="font-weight: bold; color:{{ payload.luck_type[0].color }};">
+						§ 天天大吉 §
+					</h1>
+				{% else %}
+					<h1 style="font-weight: bold; color:{{ payload.luck_type[UserContext.checkin_luck].color }};">
+						§ {{ payload.luck_type[UserContext.checkin_luck].text }} §
+					</h1>
+				{% endif %}
+			<p>已连续打卡 {{ UserContext.checkin_cnt_now }} 天，累计打卡 {{ UserContext.checkin_cnt_all }} 天</p>
+			{% else %}
+				<a href="/checkin" class="expanded button">
+					<span class="icon icon-feeling-lucky"> </span>
+					抽取今日运势
+				</a>
+			{% endif %}
+		{% else %}
+			<p>登录后可抽取</p>
+		{% endif %}
+	</div>
+</div>
