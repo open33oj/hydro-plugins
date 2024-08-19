@@ -3,7 +3,7 @@
 基于 [Hydro](https://github.com/hydro-dev/Hydro) 框架部署的 [33OJ](https://oj.33dai.cn) 使用到的一些插件。
 
 - 交流反馈 QQ 群：515497602
-- 网络有好的 Gitee 镜像库：https://gitee.com/wood3_admin/hydro-plugins
+- 网络友好的 Gitee 镜像库：https://gitee.com/wood3_admin/hydro-plugins
 
 ## 已有/计划中的项目
 
