@@ -155,5 +155,13 @@ export async function apply(ctx: Context) {
     ctx.Route('paste_show', '/paste/show/:id', PasteShowHandler);
     ctx.Route('paste_edit', '/paste/show/:id/edit', PasteEditHandler, PRIV.PRIV_USER_PROFILE);
     ctx.Route('paste_delete', '/paste/show/:id/delete', PasteDeleteHandler, PRIV.PRIV_USER_PROFILE);
+    ctx.injectUI('UserDropdown', 'paste_manage', (h) => ({ icon: 'book', displayName: 'Pastebin'}), PRIV.PRIV_USER_PROFILE);
+    ctx.i18n.load('zh', {
+        Pastebin: '剪切板',
+        blog_main: '剪切板',
+    });
+    ctx.i18n.load('en', {
+        blog_main: 'Pastebin',
+    });
 }
 
