@@ -1,0 +1,59 @@
+{% set page_name = "realname_show" %}
+{% import "components/nothing.html" as nothing with context %}
+{% import "components/paginator.html" as paginator with context %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+    <div class="medium-12 columns">
+        <div class="section">
+            <div class="section__header">
+                <h1 class="section__title">实名认证用户</h1>
+            </div>
+            <div class="section__body no-padding">
+                <div data-fragment-id="ranking">
+                    {% if not udocs.length %}
+                    {{ nothing.render('没有实名认证用户！') }}
+                    {% else %}
+                    <table class="data-table">
+                        <colgroup>
+                            <col class="col--uid" style="width:9rem">
+                            <col class="col--flag" style="width:12rem">
+                            <col class="col--name" style="width:12rem">
+                            <col class="col--user">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="col--uid">用户 ID</th>
+                                <th class="col--flag">标记</th>
+                                <th class="col--name">姓名</th>
+                                <th class="col--user">用户</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%- for udoc in udocs -%}
+                            <tr>
+                                <td class="col--uid">{{ udoc._id }}</td>
+                                {%- if udoc.realname_flag == 1 -%}
+                                <td> 学生 </td>
+                                {%- elif udoc.realname_flag == 2 -%}
+                                <td> 老师 </td>
+                                {%- else -%}
+                                <td> 未设置身份 </td>
+                                {%- endif -%}
+            
+                                <td>{{ udoc.realname_name  }}</td>
+                                <td class="col--user">
+                                    {{ user.render_inline(udoc) }}
+                                </td>
+                            </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                    {{ paginator.render(page, upcount) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

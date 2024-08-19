@@ -2,13 +2,19 @@
 
 基于 [Hydro](https://github.com/hydro-dev/Hydro) 框架部署的 [33OJ](https://oj.33dai.cn) 使用到的一些插件。
 
+- 交流反馈 QQ 群：515497602
+- 网络有好的 Gitee 镜像库：https://gitee.com/wood3_admin/hydro-plugins
+
+## 已有/计划中的项目
+
 - `frontend-33oj`：33OJ 的前端修改
 - `badge-33oj`：徽章管理插件
-- `pastebin-33oj`：剪贴板插件，基于官方例子与 [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
+- `realname-33oj`：简单实名插件
 - `checkin-33oj`：打卡及每日运势
+- `pastebin-33oj`：剪贴板插件，基于官方例子与 [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
 - `coin-33oj`：简单硬币插件（重写中）
-- `realname-33oj`：简单实名插件（重写中）
 - `countdown`：倒计时插件，基于 [liyanqwq/hydrooj-countdown](https://github.com/liyanqwq/hydrooj-countdown)
+- `group-plus-33oj`：更友好的小组管理（计划中）
 
 ## frontend-33oj
 
@@ -68,6 +74,26 @@
 
 - 入口：`baseurl/badge`，找个地方把这个入口丢一下就好了。
 - 权限配置：默认是所有用户可以查看，`PRIV.PRIV_CREATE_DOMAIN` 用户可以管理。
+
+
+## realname-33oj
+
+简单实名插件，重载了 `UserModel.getListForRender` 来在榜单中展示用户名。默认有三个角色 `0/1/2` 分别对应 `未分配/学生/老师`
+
+### 安装
+
+1. 添加插件：`hydrooj addon add /path/to/realname-33oj`
+2. 重启程序：`pm2 restart hydrooj`
+
+### 配置
+
+- 入口：
+  - `baseurl/realname/show`：查看所有实名用户。
+  - `baseurl/realname/set`：设置实名。
+- 权限配置：
+  - 所有人可以看到老师/学生的小 logo
+  - `perm.PERM_VIEW_DISPLAYNAME`（显示域中用户的显示名）：可以查看到域中用户的实名
+  - `PRIV.PRIV_CREATE_DOMAIN`（创建域）：可以管理（设置实名、查看所有实名）。
 
 ## checkin-33oj
 

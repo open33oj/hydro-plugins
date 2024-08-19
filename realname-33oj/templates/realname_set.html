@@ -1,0 +1,44 @@
+{% set page_name = "realname_set" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title" data-heading>认证</h1>
+      </div>
+      <div class="section__body">
+        <form method="post">
+          {{ form.form_text({
+            label:'By Username / UID',
+            name:'uidOrName',
+            autofocus:true,
+            required:true
+          }) }}
+          {{ form.form_select({
+            label:'认证',
+            name:'flag',
+            options:{
+            '0': '不添加身份',
+            '1': '学生',
+            '2': '老师'
+            },
+            value: '0'
+          }) }}
+          {{ form.form_text({
+            label:'姓名',
+            name:'name'
+          }) }}
+          <div class="row">
+            <div class="columns">
+              <button type="submit" class="rounded primary button">
+                设置
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
