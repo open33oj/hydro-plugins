@@ -8,7 +8,7 @@ export const collV: Collection<VUdoc> = db.collection('vuser');
 export const collGroup: Collection<GDoc> = db.collection('user.group');
 UserModel.getListForRender = async function (domainId: string, uids: number[]) {
     const [udocs, vudocs, dudocs] = await Promise.all([
-        UserModel.getMulti({ _id: { $in: uids } }, ['_id', 'uname', 'mail', 'avatar', 'school', 'studentId', 'wotojo_flag', 'wotojo_name']).toArray(),
+        UserModel.getMulti({ _id: { $in: uids } }, ['_id', 'uname', 'mail', 'avatar', 'school', 'studentId', 'realname_flag', 'realname_name']).toArray(),
         collV.find({ _id: { $in: uids } }).toArray(),
         DomainModel.getDomainUserMulti(domainId, uids).project({ uid: true, displayName: true }).toArray(),
     ]);
