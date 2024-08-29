@@ -1,0 +1,67 @@
+{% set page_name = "coin_bill" %}
+{% extends "layout/basic.html" %}
+{% import "components/paginator.html" as paginator with context %}
+{% import "components/nothing.html" as nothing with context %}
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ uid }} 的发放记录</h1>
+        <div class="section__tools"> 
+          <a href="/coin/inc">
+            <button class="primary rounded button">[SU]发放硬币</button>
+          </a>
+          <a href="/coin/bill/0">
+            <button class="primary rounded button">[SU]查看所有人的硬币发放记录</button>
+          </a>
+          <a href="/coin/bill/{{ handler.user._id }}">
+            <button class="primary rounded button">查看我的硬币发放记录</button>
+          </a>
+          <a href="/coin/show">
+            <button class="primary rounded button">查看所有人的硬币余额</button>
+          </a>
+	</div>
+      </div>
+      <div class="section__body no-padding">
+        <div data-fragment-id="ranking">
+          {% if not bills.length %}
+          {{ nothing.render('没有过硬币！') }}
+          {% else %}
+          <table class="data-table">
+            <colgroup>
+              <col class="col--time">
+              <col class="col--uid">
+              <col class="col--uid">
+              <col class="col--amount">
+              <col class="col--text">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="col--time">时间</th>
+                <th class="col--uid">发放人的用户ID</th>
+                <th class="col--uid">接收者的用户ID</th>
+                <th class="col--amount">数额</th>
+                <th class="col--text">原因</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for bill in bills -%}
+              <tr data-uid="{{ udoc.uid }}">
+                <td class="col--time">{{ datetimeSpan(bill._id)|safe }}</td>
+                <td class="col--uid">{{ bill.rootId }}</td>
+                <td class="col--uid">{{ bill.userId }}</td>
+                <td class="col--amount">{{ bill.amount }}</td>
+                <td class="col--text">{{ bill.text }}</td>
+              </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+	  {{ paginator.render(page, upcount) }}	
+	  {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@
 - `realname-33oj`：简单实名插件
 - `checkin-33oj`：打卡及每日运势
 - `pastebin-33oj`：剪贴板插件，基于官方例子与 [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
-- `coin-33oj`：简单硬币插件（重写中）
+- `coin-33oj`：简单硬币插件
 - `countdown`：倒计时插件，基于 [liyanqwq/hydrooj-countdown](https://github.com/liyanqwq/hydrooj-countdown)
 - `group-plus-33oj`：更友好的小组管理（计划中）
 
@@ -144,6 +144,33 @@
 ### 配置
 
 - 入口：`baseurl/paste/manage`，找个地方把这个入口丢一下就好了。
+
+## coin-33oj
+
+简单硬币插件，实际上就是一个账单和一个记录当前硬币数量的字段。
+
+### 安装
+
+1. 添加插件：`hydrooj addon add /path/to/coin-33oj`
+2. 重启程序：`pm2 restart hydrooj`
+
+### 配置
+
+- 入口：
+  - `baseurl/coin/show`：查看所有人的硬币数量
+  - `baseurl/coin/inc`：增加某位用户的硬币
+  - `baseurl/coin/bill`：查看账单
+    - `baseurl/coin/bill/0`：查看所有人
+    - `baseurl/coin/bill/uid`：查看 uid 用户
+- 权限配置：
+  - `PRIV.PRIV_CREATE_DOMAIN`：可以发硬币以及看所有硬币发放记录
+  - 所有人可以看到硬币榜单和自己的账单
+
+### TODO
+
+- [ ] 类似于导入用户的批量发硬币
+- [ ] 更人性化的 UI
+- [ ] 简单的商城系统
 
 ## countdown
 

@@ -1,0 +1,38 @@
+{% set page_name = "coin_inc" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title" id="create" data-heading>发放硬币</h1>
+      </div>
+      <div class="section__body">
+	<form method="post">
+            {{ form.form_text({
+                label:'被发放的UID',
+                name:'uidOrName',
+                autofocus:true,
+                required:true
+            }) }}
+            {{ form.form_text({
+                label:'发放数量（负数即为扣除）',
+                name:'amount',
+                required:true
+            }) }}
+            {{ form.form_text({
+                label:'发放原因',
+                name:'text',
+                required:true
+            }) }}
+          <div class="row"><div class="columns">
+            <button type="submit" class="rounded primary button">
+               发放 
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
