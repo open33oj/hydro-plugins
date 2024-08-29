@@ -35,8 +35,8 @@
       {% set level = udoc.level %}
       <a class="user-profile-badge v-center badge--lv{{ level }}" href="{{ url('user_detail', uid=udoc._id) }}" data-tooltip="LV {{ level }}: Top {{ model.builtin.LEVELS[level]|default('N/A') }}%">
         LV {{ level }}
-        {% if udoc.coin and udoc.allCoin %}
-          ({{ udoc.coin }}/{{ udoc.allCoin }})
+        {% if udoc.coin_now and udoc.coin_all %}
+          ({{ udoc.coin_now }}/{{ udoc.coin_all }})
         {% endif %}
       </a>
     {% endif %}
