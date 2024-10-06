@@ -2,13 +2,15 @@
 // @module: esnext
 // @filename: index.ts
 import {
-    db, definePlugin, Handler, NotFoundError, param, PermissionError, PRIV, Types,
+    db, definePlugin, Handler, NotFoundError,
+    param, PermissionError, PRIV, Types, UserModel
 } from 'hydrooj';
 
 const coll = db.collection('paste');
 
 interface Paste {
     _id: string;
+    updateAt: Date,
     title: string;
     owner: number;
     content: string;
@@ -29,6 +31,7 @@ async function add(userId: number, title: string, content: string, isprivate: bo
     // 使用 mongodb 为数据库驱动，相关操作参照其文档
     const result = await coll.insertOne({
         _id: pasteId,
+        updateAt: new Date(),
         title: title,
         owner: userId,
         content,
@@ -43,6 +46,7 @@ async function edit(pasteId: string, userId: number, title: string, content: str
     }, {
         $set: {
             title: title,
+            updateAt: new Date(),
             owner: userId,
             content: content,
             isprivate: isprivate,
@@ -55,7 +59,11 @@ async function get(pasteId: string): Promise<Paste> {
 }
 
 async function getUserPaste(userId: number): Promise<Paste> {
-    return await coll.find({ "owner": userId }).sort({ time: -1 }).toArray();
+    return await coll.find({ "owner": userId }).sort({ updateAt: -1 }).toArray();
+}
+
+async function getAllPaste(userId: number): Promise<Paste> {
+    return await coll.find().sort({ updateAt: -1 }).toArray();
 }
 
 async function del(pasteId: string): Promise<Paste> {
@@ -63,7 +71,7 @@ async function del(pasteId: string): Promise<Paste> {
 }
 
 // 暴露这些接口，使得 cli 也能够正常调用这些函数；
-const pastebinModel = { add, edit, get, getUserPaste, del };
+const pastebinModel = { add, edit, get, getUserPaste, getAllPaste, del };
 global.Hydro.model.pastebin = pastebinModel;
 
 class PasteCreateHandler extends Handler {
@@ -85,7 +93,7 @@ class PasteEditHandler extends Handler {
         const doc = await pastebinModel.get(id);
         if (!doc) throw new NotFoundError(id);
         if (this.user._id !== doc.owner) {
-            throw new PermissionError();
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
         }
         this.response.body = { doc };
         this.response.template = 'paste_edit.html';
@@ -98,9 +106,9 @@ class PasteEditHandler extends Handler {
         const doc = await pastebinModel.get(pasteId);
         if (!doc) throw new NotFoundError(pasteId);
         if (this.user._id !== doc.owner) {
-            throw new PermissionError();
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
         }
-        await pastebinModel.edit(pasteId, this.user._id, title, content, !!isprivate);
+        await pastebinModel.edit(pasteId, doc.owner, title, content, !!isprivate);
         this.response.redirect = this.url('paste_show', { id: pasteId });
     }
 }
@@ -111,9 +119,10 @@ class PasteShowHandler extends Handler {
         const doc = await pastebinModel.get(id);
         if (!doc) throw new NotFoundError(id);
         if (doc.isprivate && this.user._id !== doc.owner) {
-            throw new PermissionError();
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
         }
-        this.response.body = { doc };
+        const udoc = await UserModel.getById(domainId, doc.owner);
+        this.response.body = { doc, udoc };
         this.response.template = 'paste_show.html';
     }
 }
@@ -124,7 +133,7 @@ class PasteDeleteHandler extends Handler {
         const doc = await pastebinModel.get(id);
         if (!doc) throw new NotFoundError(id);
         if (this.user._id !== doc.owner) {
-            throw new PermissionError();
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
         }
         this.response.body = { doc };
         this.response.template = 'paste_delete.html';
@@ -134,7 +143,7 @@ class PasteDeleteHandler extends Handler {
         const doc = await pastebinModel.get(pasteId);
         if (!doc) throw new NotFoundError(pasteId);
         if (this.user._id !== doc.owner) {
-            throw new PermissionError();
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
         }
         await pastebinModel.del(pasteId);
         this.response.redirect = this.url('paste_manage');
@@ -142,10 +151,18 @@ class PasteDeleteHandler extends Handler {
 }
 
 class PasteManageHandler extends Handler {
-    async get(domainId: string) {
-        const doc = await pastebinModel.getUserPaste(this.user._id);
-        this.response.body = { doc };
-        this.response.template = 'paste_manage.html';
+    @param('all', Types.Boolean)
+    async get(domainId: string, all = false) {
+        if (all) {
+            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
+            const doc = await pastebinModel.getAllPaste();
+            this.response.body = { doc, all };
+            this.response.template = 'paste_manage.html';
+        } else {
+            const doc = await pastebinModel.getUserPaste(this.user._id);
+            this.response.body = { doc, all };
+            this.response.template = 'paste_manage.html';
+        }
     }
 }
 
