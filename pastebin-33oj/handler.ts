@@ -3,7 +3,8 @@
 // @filename: index.ts
 import {
     db, definePlugin, Handler, NotFoundError,
-    param, PermissionError, PRIV, Types, UserModel
+    param, PermissionError, PRIV, Types, UserModel,
+    query
 } from 'hydrooj';
 
 const coll = db.collection('paste');
@@ -58,20 +59,27 @@ async function get(pasteId: string): Promise<Paste> {
     return await coll.findOne({ _id: pasteId });
 }
 
-async function getUserPaste(userId: number): Promise<Paste> {
-    return await coll.find({ "owner": userId }).sort({ updateAt: -1 }).toArray();
+async function countUserPaste(userId: number): Promise<Paste> {
+    if (userId != 0)
+        return await coll.count({ "owner": userId });
+    else
+        return await coll.count();
 }
 
-async function getAllPaste(userId: number): Promise<Paste> {
-    return await coll.find().sort({ updateAt: -1 }).toArray();
+async function getUserPaste(userId: number, ll: number, ss: number): Promise<Paste> {
+    if (userId != 0)
+        return await coll.find({ "owner": userId }).limit(ll).skip((ss - 1) * ll).sort({ updateAt: -1 }).toArray();
+    else
+        return await coll.find().sort({ updateAt: -1 }).limit(ll).skip((ss - 1) * ll).toArray();
 }
+
 
 async function del(pasteId: string): Promise<Paste> {
     return await coll.deleteOne({ _id: pasteId });
 }
 
 // 暴露这些接口，使得 cli 也能够正常调用这些函数；
-const pastebinModel = { add, edit, get, getUserPaste, getAllPaste, del };
+const pastebinModel = { add, edit, get, getUserPaste, countUserPaste, del };
 global.Hydro.model.pastebin = pastebinModel;
 
 class PasteCreateHandler extends Handler {
@@ -151,24 +159,32 @@ class PasteDeleteHandler extends Handler {
 }
 
 class PasteManageHandler extends Handler {
-    @param('all', Types.Boolean)
-    async get(domainId: string, all = false) {
-        if (all) {
-            this.checkPriv(PRIV.PRIV_CREATE_DOMAIN);
-            const doc = await pastebinModel.getAllPaste();
-            this.response.body = { doc, all };
-            this.response.template = 'paste_manage.html';
-        } else {
-            const doc = await pastebinModel.getUserPaste(this.user._id);
-            this.response.body = { doc, all };
-            this.response.template = 'paste_manage.html';
-        }
+    @query('page', Types.PositiveInt, true)
+    async get(domainId: string, page = 1) {
+        let dcount = await pastebinModel.countUserPaste(this.user._id);
+        let upcount = parseInt((dcount + 19) / 20);
+        const doc = await pastebinModel.getUserPaste(this.user._id, 20, page);
+        const all = false;
+        this.response.body = { doc, all, page, upcount };
+        this.response.template = 'paste_manage.html';
     }
 }
 
+class PasteAllHandler extends Handler {
+    @query('page', Types.PositiveInt, true)
+    async get(domainId: string, page = 1) {
+        let dcount = await pastebinModel.countUserPaste(0);
+        let upcount = parseInt((dcount + 19) / 20);
+        const doc = await pastebinModel.getUserPaste(0, 20, page);
+        const all = true;
+        this.response.body = { doc, all, page, upcount };
+        this.response.template = 'paste_manage.html';
+    }
+}
 export async function apply(ctx: Context) {
     ctx.Route('paste_create', '/paste/create', PasteCreateHandler, PRIV.PRIV_USER_PROFILE);
     ctx.Route('paste_manage', '/paste/manage', PasteManageHandler, PRIV.PRIV_USER_PROFILE);
+    ctx.Route('paste_all', '/paste/all', PasteAllHandler,  PRIV.PRIV_CREATE_DOMAIN);
     ctx.Route('paste_show', '/paste/show/:id', PasteShowHandler);
     ctx.Route('paste_edit', '/paste/show/:id/edit', PasteEditHandler, PRIV.PRIV_USER_PROFILE);
     ctx.Route('paste_delete', '/paste/show/:id/delete', PasteDeleteHandler, PRIV.PRIV_USER_PROFILE);

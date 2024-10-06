@@ -145,7 +145,7 @@
 ### 配置
 
 - 入口：`baseurl/paste/manage`，找个地方把这个入口丢一下就好了。
-- `/paste/manage?all=1`：拥有 `PRIV_CREATE_DOMAIN` 权限的人可以管理所有剪贴板。
+- `/paste/all`：拥有 `PRIV_CREATE_DOMAIN` 权限的人可以管理所有剪贴板。
 
 ## coin-33oj
 
