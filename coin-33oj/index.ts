@@ -35,7 +35,7 @@ async function billCount() {
 }
 
 async function getAll(ll: number, ss: number) {
-    return await coll.find().limit(ll).skip((ss - 1) * ll).sort({ time: -1 }).toArray();
+    return await coll.find().limit(ll).skip((ss - 1) * ll).sort({ _id: -1 }).toArray();
 }
 
 
@@ -45,7 +45,7 @@ async function userBillCount(userId: number) {
 
 
 async function getUser(userId: number, ll: number, ss: number) {
-    return await coll.find({ "userId": userId }).limit(ll).skip((ss - 1) * ll).sort({ time: -1 }).toArray();
+    return await coll.find({ "userId": userId }).limit(ll).skip((ss - 1) * ll).sort({ _id: -1 }).toArray();
 }
 
 const coinModel = { inc, billCount, getAll, userBillCount, getUser };
