@@ -68,7 +68,7 @@ async function countUserPaste(userId: number): Promise<Paste> {
 
 async function getUserPaste(userId: number, ll: number, ss: number): Promise<Paste> {
     if (userId != 0)
-        return await coll.find({ "owner": userId }).limit(ll).skip((ss - 1) * ll).sort({ updateAt: -1 }).toArray();
+        return await coll.find({ "owner": userId }).sort({ updateAt: -1 }).limit(ll).skip((ss - 1) * ll).toArray();
     else
         return await coll.find().sort({ updateAt: -1 }).limit(ll).skip((ss - 1) * ll).toArray();
 }
