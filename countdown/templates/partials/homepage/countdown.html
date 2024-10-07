@@ -1,24 +1,10 @@
 <div class="section side nojs--hide">
   <div class="section__header">
-    <h1 class="section__title" id="countdown_title">
-      {% if payload.title %}
-      {{payload.title}}
-      {% endif %}
-    </h1>
+    <h1 class="section__title">{{ _(payload.title) }}</h1>
   </div>
-  {{payload.test}}
-  {% if payload.dates %}
-  <div class="section__body typo" id="countdowns">
-    {% for date in payload.dates %}
-    <p> 距 {{date.name}} 还有 {{date.diff}} 天 </p>
-    {% endfor %}
+  <div class="section__body typo">
+    {%- for item in payload.dates -%}
+      <p>{{ _('There are {0} days left until {1}.').format(item.remaining, item.name) }}</p>
+    {%- endfor -%}
   </div>
-  {% endif %}
 </div>
-<script>
-  function loadCountdown() {
-    console.log('Powered by hydrooj-countdown https://github.com/liyanqwq/hydrooj-countdown, Modified by 33DAi');
-    window.dispatchEvent(new Event('countdown-finish'));
-  }
-  window.addEventListener('load', loadCountdown, { once: true });
-</script>
