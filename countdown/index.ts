@@ -28,4 +28,4 @@ async function getCountdown(payload) {
 
 HomeHandler.prototype.getCountdown = async (domainId, payload) => {
     return await getCountdown(payload);
-};
+}
