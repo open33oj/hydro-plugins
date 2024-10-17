@@ -51,8 +51,7 @@
         <span class="icon icon-send"></span> {{ _('No Permission to Submit') }}
       </a></li>
     {% endif %}
-    {% if handler.user.hasPerm(perm.PERM_REJUDGE_PROBLEM) and page_name == 'problem_statistics' %}
-      <li class="menu__seperator"></li>
+    {% if handler.user.hasPerm(perm.PERM_REJUDGE_PROBLEM) and page_name != 'problem_statistics' %}
       <li class="menu__item">
         <form method="post" action="{{ url('problem_detail', pid=pdoc.docId) }}">
           <input type="hidden" name="operation" value="rejudge">
