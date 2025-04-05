@@ -35,8 +35,8 @@
 - `templates/partials/footer.html`：按个人喜好去掉了一些内容，添加了修改声明
 - `templates/partials/problem_default.md`：将默认题目模板替换成了 [题型测试：输出测试](https://oj.33dai.cn/p/D0008)
 - `templates/partials/homepage/recent_problems.html`：去掉了最近题目的时间
-- `templates/user_detail.html`：依赖 coin 插件与 realname 插件。在个人页面展示硬币数量、实名信息、并隐藏掉个人简介。
-- `templates/partials/problem_sidebar_normal.html`：把重测按钮在统计页面临时隐藏
+- `templates/user_detail.html`：依赖 coin 插件与 realname 插件。在个人页面展示硬币数量、实名信息、并隐藏掉个人简介
+- `templates/training_main.html`、`templates/partials/training_list.html`：把训练列表改成了类似于题库的形式
 
 ### 功能添加
 

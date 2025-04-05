@@ -1,43 +1,31 @@
-# HydroOJ Countdown
+## countdown
 
-适用于 [HydroOJ](//hydro.js.org) 的倒计时插件。
+在 https://github.com/liyanqwq/hydrooj-countdown 的基础上进行了一些修改。
 
-## Installation
+### 安装
 
-1. 安装命令：
+1. 安装依赖：运行 `cd /path/to/countdown` 进入倒计时插件的文件夹，然后 `yarn` 
+2. 添加插件：`hydrooj addon add /path/to/countdown`
 
-```bash
-yarn global add hydrooj-countdown
-hydrooj addon add hydrooj-countdown
-```
+### 配置
 
-2. 重启 HydroOJ。
-
-3. 进入 HydroOJ 控制面板 - hydrooj - 主页，将下方配置信息粘贴到适当位置。
+在 `控制面板`、`系统设置`、`hydrooj`、`首页` 中添加类似下面这样的配置项
 
 ```
   countdown:
-    title: 咕咕倒计时
-    max_dates: 3
+    title: 倒计时-不计头尾
+    max_dates: 5
     dates:
-      - name: NOI Online 2022
-        date: 2022-03-26
-      - name: NOI 2022 省选 / NGOI
-        date: 2022-04-04
-      - name: NOI 2022
-        date: 2022-07-23
-      - name: IOI 2022
-        date: 2022-08-07
-      - name: CSP 2022 一轮
-        date: 2022-09-18
-      - name: CSP 2022 二轮
-        date: 2022-10-22
-      - name: NOIP 2022
-        date: 2022-11-19
+      - name: NOI 2024 报到
+        date: 2024-07-16
+      - name: NOI 2024 Day1
+        date: 2024-07-18
+      - name: NOI 2024 Day2
+        date: 2024-07-20
+      - name: CSP-J/S 2024 第一轮
+        date: 2024-09-21
+      - name: CSP-J/S 2024 第二轮
+        date: 2024-10-26
 ```
 
-然后应该就能用了，其他见上面配置。
-
-## License
-
-AGPL v3
+然后重启程序：`pm2 restart hydrooj`

@@ -1,0 +1,70 @@
+{% if not tdocs.length %}
+{{ nothing.render('Sorry, there are no training plans.') }}
+{% else %}
+
+
+
+<style>
+    .col--status { width: 8.75rem; position: relative; border-right: 1px solid color-mix(in srgb, #ddd 80%, white 20%); }
+    .col--ac-tried{width: 8.75rem; text-align: center; border-left: 1px solid color-mix(in srgb, #ddd 80%, white 20%); }
+    .col--difficulty{ width: 7rem; text-align: center; }
+</style>
+
+<table class="data-table">
+    <colgroup>
+    {% if handler.user.hasPriv(PRIV.PRIV_USER_PROFILE) %}
+      <col class="col--status edit-mode-hide">
+    {% endif %}
+      <col class="col--name">
+      <col class="col--ac-tried">
+      <col class="col--difficulty">
+    </colgroup>
+    <thead>
+        <tr>
+            {% if handler.user.hasPriv(PRIV.PRIV_USER_PROFILE) %}
+            <th class="col--status">完成情况</th>
+            {% endif %}
+            <th class="col--name"> 训练计划名称 </th>
+            <th class="col--ac-tried">题目数量</th>
+            <th class="col--difficulty">参加人数</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%- for tdoc in tdocs -%}
+        <tr>
+            {% if handler.user.hasPriv(PRIV.PRIV_USER_PROFILE) %}
+            <td class="col--status">
+                {% if tsdict[tdoc.docId]['enroll'] %}
+                {% if not tsdict[tdoc.docId]['done'] %}
+                <span class="icon training-status--icon progress"></span>
+                <span class="training-status--text progress">{{ _('Completed') }} {{ (100 *
+                    tsdict[tdoc.docId]['donePids']|length / model.training.getPids(tdoc.dag)|length)|round|int
+                    }}%</span>
+                {% else %}
+                <span class="icon training-status--icon done"></span>
+                <span class="training-status--text done">{{ _('Completed') }} 100%</span>
+                {% endif %}
+                {% elif handler.user.hasPriv(PRIV.PRIV_USER_PROFILE) %}
+                <span class="icon training-status--icon outside"></span> <span class="training-status--text outside">{{
+                    _('Not Enrolled') }}</span>
+                {% endif %}
+            </td>
+            {% endif %}
+
+            <td class="col--name ">
+                <a href="{{ url('training_detail', tid=tdoc.docId) }}">{{ tdoc.title }}</a>
+            </td>
+            <td class="col--ac-tried">
+                {{ _('{0} sections').format(tdoc['dag']|length) }} /
+                {{ _('{0} problems').format(model.training.getPids(tdoc.dag)|length) }}
+            </td>
+            <td class="col--difficulty">
+                {{ tdoc.attend|default(0) }} {{ _('Enrolled') }}
+            </td>
+        </tr>
+        {%- endfor -%}
+    </tbody>
+</table>
+{{ paginator.render(page, tpcount, add_qs=qs) }}
+
+{% endif %}
