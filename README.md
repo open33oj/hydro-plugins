@@ -2,10 +2,14 @@
 
 基于 [Hydro](https://github.com/hydro-dev/Hydro) 框架部署的 [33OJ](https://oj.33dai.cn) 使用到的一些插件。
 
-写得都非常粗糙，很多错误，谨慎使用。目前适配 Hydro 版本 `4.16.0`。
+写得都非常粗糙，很多错误，谨慎使用。目前适配 Hydro 版本 `4.19.1`。
 
 - 交流反馈 QQ 群：515497602
 - 网络友好的 Gitee 镜像库：https://gitee.com/wood3_admin/hydro-plugins
+
+## 注意
+
+`/path/to/xxx` 指的是 `xxx` 这个文件夹在服务器上的完整路径。
 
 ## 已有/计划中的项目
 
@@ -13,10 +17,14 @@
 - `badge-33oj`：徽章管理插件
 - `realname-33oj`：简单实名插件
 - `checkin-33oj`：打卡及每日运势
-- `pastebin-33oj`：剪贴板插件，基于官方例子与 [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
+- `pastebin-33oj`：剪贴板插件
 - `coin-33oj`：简单硬币插件
-- `countdown`：倒计时插件，基于 [liyanqwq/hydrooj-countdown](https://github.com/liyanqwq/hydrooj-countdown)
+- `countdown-33oj`：倒计时插件
 - `group-plus-33oj`：更友好的小组管理（计划中）
+- 参考项目：
+  - 官方插件例子
+  - [liyanqwq/hydrooj-countdown](https://github.com/liyanqwq/hydrooj-countdown)
+  - [liyanqwq/hydrooj-pastebin-plus](https://github.com/liyanqwq/hydrooj-pastebin-plus)
 
 ## frontend-33oj
 
@@ -177,14 +185,14 @@
 - [ ] 更人性化的 UI
 - [ ] 简单的商城系统
 
-## countdown
+## countdown-33oj
 
 在 https://github.com/liyanqwq/hydrooj-countdown 的基础上进行了一些修改。
 
 ### 安装
 
-1. 安装依赖：运行 `cd /path/to/countdown` 进入倒计时插件的文件夹，然后 `yarn` 
-2. 添加插件：`hydrooj addon add /path/to/countdown`
+1. 添加插件：`hydrooj addon add /path/to/countdown-33oj`
+2. 重启程序：`pm2 restart hydrooj`
 
 ### 配置
 
@@ -192,19 +200,21 @@
 
 ```
   countdown:
-    title: 倒计时-不计头尾
+    title: 倒计时
     max_dates: 5
     dates:
-      - name: NOI 2024 报到
-        date: 2024-07-16
-      - name: NOI 2024 Day1
-        date: 2024-07-18
-      - name: NOI 2024 Day2
-        date: 2024-07-20
-      - name: CSP-J/S 2024 第一轮
-        date: 2024-09-21
-      - name: CSP-J/S 2024 第二轮
-        date: 2024-10-26
+      - name: APIO 2025
+        date: 2025-05-15
+      - name: NOI 2025
+        date: 2025-07-12
+      - name: IOI 2025
+        date: 2025-07-27
+      - name: CSP-J/S 2025 第一轮
+        date: 2025-09-20
+      - name: CSP-J/S 2025 第二轮
+        date: 2025-11-01
+      - name: NOIP 2025
+        date: 2025-11-29
 ```
 
 然后重启程序：`pm2 restart hydrooj`
