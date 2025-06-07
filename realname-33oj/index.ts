@@ -1,5 +1,5 @@
 import {
-    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query
+    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query, NotFoundError
 } from 'hydrooj';
 
 // 修复 `getListForRender` 函数，给前端传递更多内容
@@ -37,7 +37,9 @@ class RealnameSetHandler extends Handler {
     async post(domainId: string, uidOrName: string, flag: number, name: string) {
         // 检查输入
         flag = parseInt(flag);
-        let udoc = await UserModel.getByUname(domainId, uidOrName);
+        let udoc = await UserModel.getById(domainId, +uidOrName)
+                || await UserModel.getByUname(domainId, uidOrName)
+                || await UserModel.getByEmail(domainId, uidOrName);
         if (!udoc)
             throw new NotFoundError(uidOrName);
         // 构建徽章代码并更新
