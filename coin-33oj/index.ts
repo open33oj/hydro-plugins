@@ -1,5 +1,5 @@
 import {
-    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query
+    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query, NotFoundError
 } from 'hydrooj';
 import { getUser, userBillCount } from './model';
 
@@ -77,7 +77,9 @@ class CoinIncHandler extends Handler {
     @param('amount', Types.Int)
     @param('text', Types.String)
     async post(domainId: string, uidOrName: string, amount: number, text: string) {
-        let udoc = await UserModel.getByUname(domainId, uidOrName);
+        let udoc = await UserModel.getById(domainId, +uidOrName)
+                || await UserModel.getByUname(domainId, uidOrName)
+                || await UserModel.getByEmail(domainId, uidOrName);
         if (!udoc)
             throw new NotFoundError(uidOrName);
         amount = parseInt(amount);

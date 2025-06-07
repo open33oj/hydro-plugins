@@ -20,7 +20,9 @@ class BadgeCreateHandler extends Handler {
     @param('textColor', Types.String)
     async post(domainId: string, uidOrName: string, text: string, color: string, textColor: string) {
         // 检查输入
-        let udoc = await UserModel.getByUname(domainId, uidOrName);
+        let udoc = await UserModel.getById(domainId, +uidOrName)
+                || await UserModel.getByUname(domainId, uidOrName)
+                || await UserModel.getByEmail(domainId, uidOrName);
         if (!udoc)
             throw new NotFoundError(uidOrName);
         text = text.replace('\'', '').replace('\"', '');
