@@ -1,5 +1,5 @@
 import {
-    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query, NotFoundError
+    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, query, NotFoundError
 } from 'hydrooj';
 
 // 修复 `getListForRender` 函数，给前端传递更多内容
@@ -53,7 +53,7 @@ class RealnameSetHandler extends Handler {
 class RealnameShowHandler extends Handler {
     @query('page', Types.PositiveInt, true)
     async get(domainId: string, page = 1) {
-        const [dudocs, upcount, ucount] = await paginate(
+        const [dudocs, upcount, ucount] = await this.ctx.db.paginate(
             UserModel.getMulti({ realname_flag: { $exists: true } }).sort({ realname_flag: -1, _id: -1 }),
             page,
             50,

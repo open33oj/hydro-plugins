@@ -1,5 +1,5 @@
 import {
-    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, paginate, query, NotFoundError
+    _, db, UserModel, SettingModel, DomainModel, Handler, param, PRIV, Types, query, NotFoundError
 } from 'hydrooj';
 import { getUser, userBillCount } from './model';
 
@@ -55,7 +55,7 @@ global.Hydro.model.coin = coinModel;
 class CoinShowHandler extends Handler {
     @query('page', Types.PositiveInt, true)
     async get(domainId: string, page = 1) {
-        const [dudocs, upcount, ucount] = await paginate(
+        const [dudocs, upcount, ucount] = await this.ctx.db.paginate(
             UserModel.getMulti({ coin_all: { $exists: true } }).sort({ coin_now: -1 }),
             page,
             50,
