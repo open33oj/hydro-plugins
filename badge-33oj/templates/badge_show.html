@@ -17,13 +17,15 @@
       <div class="section__header">
           <h1 class="section__title">{{ _('Users With Badge') }}</h1>
           <div class="section__tools">
-            <a href="/badge/create">
+            {% if handler.user.hasPriv(priv.PRIV_CREATE_DOMAIN) %}
+            <a href="/manage/badge/create">
               <button class="primary rounded button">{{ _('badge_create') }}</button>
-	    </a>
-            <a href="/badge/manage">
-	      <button class="primary rounded button">{{ _('badge_manage') }}</button>
+	          </a>
+            <a href="/manage/badge">
+	            <button class="primary rounded button">{{ _('badge_manage') }}</button>
             </a>
-	  </div>
+            {% endif %}
+	        </div>
       </div>
       <div class="section__body no-padding">
         <div data-fragment-id="ranking">

@@ -1,8 +1,8 @@
 {% set page_name = "badge_manage" %}
-{% extends "layout/basic.html" %}
 {% import "components/paginator.html" as paginator with context %}
 {% import "components/nothing.html" as nothing with context %}
-{% block content %}
+{% extends "manage_base.html" %}
+{% block manage_content %}
 <style>
 .col--uid {
     width: 4rem;
@@ -17,13 +17,10 @@
       <div class="section__header">
           <h1 class="section__title">{{ _('Users With Badge') }}</h1>
           <div class="section__tools">
-            <a href="/badge/create">
+            <a href="/manage/badge/create">
               <button class="primary rounded button">{{ _('badge_create') }}</button>
             </a>
-            <a href="/badge">
-              <button class="primary rounded button">{{ _('badge_show') }}</button>
-            </a>
-	  </div>
+	        </div>
       </div>
       <div class="section__body no-padding">
         <div data-fragment-id="ranking">
@@ -64,7 +61,7 @@
                     </span>
 		  </td>
                   <td class="col--actions">
-                    <a href = "/badge/manage/{{ udoc._id }}/del" >{{ _('del badge') }}</a>
+                    <a href = "/manage/badge/{{ udoc._id }}/del" >{{ _('del badge') }}</a>
                   </td>
                 </tr>
                 {%- endfor -%}
