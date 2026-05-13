@@ -1,0 +1,37 @@
+{% set page_name = "birthday_set" %}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">设置生日</h1>
+      </div>
+      <div class="section__body">
+        <form method="post">
+          {{ form.form_text({
+            label:'用户名 / UID',
+            name:'uidOrName',
+            autofocus:true,
+            required:true
+          }) }}
+          {{ form.form_text({
+              label:'生日 (格式: YYYY-MM-DD)',
+              name:'date',
+              autofocus:true,
+              required:true,
+              placeholder:'例如: 2026-04-10'
+          }) }}
+          <div class="row">
+            <div class="columns">
+              <button type="submit" class="rounded primary button">
+                保存生日
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

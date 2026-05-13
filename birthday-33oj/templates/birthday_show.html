@@ -1,0 +1,236 @@
+{% set page_name = "birthday_show" %}
+{% import "components/nothing.html" as nothing with context %}
+{% extends "layout/basic.html" %}
+
+{% block content %}
+
+<style>
+  /* 1. 容器：增加左右留白与高级黑金配色 */
+  .birthday-page-container {
+    padding: 2rem 5%; /* 左右留白 5% */
+    min-height: 100vh;
+  }
+
+  .birthday-wrapper {
+    position: relative;
+    overflow: hidden;
+    /* 更加华丽的暗色霓虹渐变 */
+    background: radial-gradient(circle at top right, #2d0036 0%, #000000 100%);
+    border-radius: 40px;
+    box-shadow: 0 0 60px rgba(142, 45, 226, 0.3);
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    max-width: 1200px; /* 限制最大宽度，确保左右留白 */
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+  }
+
+  /* 2. 标题：动态极光文字 */
+  .birthday-title {
+    text-align: center;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #fff, #ffd700, #ff00de, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s linear infinite;
+    margin-bottom: 3rem;
+    z-index: 10;
+  }
+
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+
+  /* 3. 寿星名牌：发光玻璃效果 */
+  .stars-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    z-index: 10;
+  }
+
+  .star-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    color: #ffd700;
+    font-size: 1.8rem;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .star-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+  }
+
+  /* 4. 增强版漂浮元素 */
+  .floating-element {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    font-weight: 900;
+    animation: floatRise var(--speed) linear infinite;
+    animation-delay: var(--delay);
+    filter: drop-shadow(0 0 8px currentColor);
+    opacity: 0;
+  }
+
+  @keyframes floatRise {
+    0% { transform: translateY(90vh) scale(0.5); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(-10vh) scale(1.2) rotate(20deg); opacity: 0; }
+  }
+
+  #fireworksCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+</style>
+
+<div class="birthday-page-container">
+  <div class="birthday-wrapper" id="birthdayWrapper">
+    <canvas id="fireworksCanvas"></canvas>
+    <div id="floatingItemsContainer"></div>
+
+    <h1 class="birthday-title">Happy Birthday</h1>
+    
+    <div data-fragment-id="ranking">
+      {% if not udocs.length %}
+        <div style="text-align:center; padding: 5rem; z-index: 10;">
+            <h2 style="color:rgba(255,255,255,0.4);">静待群星闪耀...</h2>
+            {{ nothing.render('去刷题区提升排名吧 ⚡') }}
+        </div>
+      {% else %}
+        <div class="stars-container">
+          {%- for udoc in udocs -%}
+            <div class="star-card">
+              <span>✨</span>
+              <span class="student-name-source">
+                {%- if udoc.realname_name -%}
+                  {{ udoc.realname_name }}
+                {%- else -%}
+                  {{ udoc.uname }}
+                {%- endif -%}
+              </span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const wrapper = document.getElementById('birthdayWrapper');
+  const canvas = document.getElementById('fireworksCanvas');
+  const container = document.getElementById('floatingItemsContainer');
+  const nameSources = document.querySelectorAll('.student-name-source');
+  
+  let cw = canvas.width = wrapper.offsetWidth;
+  let ch = canvas.height = wrapper.offsetHeight;
+  
+  const names = Array.from(nameSources).map(el => el.textContent.trim()).filter(t => t);
+  const wishes = ['Happy Birthday', '🎂', '🎊', 'Happy Day', '🎈', '✨', '🎁', '🎂'];
+  const colors = ['#FFD700', '#FF00DE', '#00E5FF', '#7C4DFF', '#FF5252', '#69FF94'];
+
+  /* 1. 即时漂浮逻辑 - 预先计算位置 */
+  if (names.length > 0) {
+    const items = [...names, ...wishes];
+    const count = 40; // 初始密集度
+
+    for (let i = 0; i < count; i++) {
+      createItem(items, true); // true 表示初始创建，随机分配负延迟
+    }
+  }
+
+  function createItem(items, initial = false) {
+    const el = document.createElement('div');
+    el.className = 'floating-element';
+    el.innerText = items[Math.floor(Math.random() * items.length)];
+    
+    const speed = 10 + Math.random() * 10;
+    const delay = initial ? -(Math.random() * speed) : 0; // 关键：负延迟让动画立即出现在屏幕不同位置
+    
+    el.style.setProperty('--speed', speed + 's');
+    el.style.setProperty('--delay', delay + 's');
+    el.style.left = (Math.random() * 90 + 5) + '%';
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.fontSize = (1 + Math.random() * 2) + 'rem';
+    
+    container.appendChild(el);
+  }
+
+  /* 2. 烟花逻辑 - 开场即爆炸 */
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x; this.y = y;
+      this.color = color;
+      this.velocity = {
+        x: (Math.random() - 0.5) * 10,
+        y: (Math.random() - 0.5) * 10
+      };
+      this.alpha = 1;
+      this.friction = 0.96;
+    }
+    draw() {
+      ctx.globalAlpha = this.alpha;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+    update() {
+      this.velocity.x *= this.friction;
+      this.velocity.y *= this.friction;
+      this.x += this.velocity.x;
+      this.y += this.velocity.y;
+      this.alpha -= 0.015;
+    }
+  }
+
+  function fire(x, y) {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    for(let i=0; i<30; i++) particles.push(new Particle(x, y, color));
+  }
+
+  // 开场瞬间连放 5 颗烟花
+  for(let i=0; i<5; i++) {
+    setTimeout(() => fire(Math.random()*cw, Math.random()*ch*0.5), i * 100);
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, cw, ch);
+    if(Math.random() < 0.05) fire(Math.random()*cw, Math.random()*ch*0.5);
+    particles = particles.filter(p => p.alpha > 0);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(render);
+  }
+
+  if (names.length > 0) render();
+});
+</script>
+
+{% endblock %}
