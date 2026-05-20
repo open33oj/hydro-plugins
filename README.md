@@ -1,3 +1,7 @@
+# 已迁移至 [OI33](https://github.com/open33oj/OI33)
+
+---------
+
 # hydro-plugins
 
 基于 [Hydro](https://github.com/hydro-dev/Hydro) 框架部署的 [33OJ](https://oj.33dai.cn) 使用到的一些插件。
